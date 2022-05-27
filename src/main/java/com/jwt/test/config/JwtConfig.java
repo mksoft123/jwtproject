@@ -14,13 +14,17 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.jwt.test.filters.JwtAuthenticationFilter;
 import com.jwt.test.services.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
 public class JwtConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
+	@Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+	
+	@Autowired
     private CustomUserDetailsService customUserDetailsService;
     @Autowired
   //  private JwtAuthenticationFilter jwtFilter;
@@ -45,7 +49,7 @@ public class JwtConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);//every request should be independent of other and server does not have to manage session
 
-      //  http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+       http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
